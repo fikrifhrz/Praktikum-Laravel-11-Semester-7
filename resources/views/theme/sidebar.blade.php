@@ -40,11 +40,11 @@ href="/products">Product</a>
 
 <a class="nav-link"
 
-href="/category">Category</a>
+href="/categories">Category</a>
 
 <a class="nav-link"
 
-href="/customer">Customer</a>
+href="/customers">Customer</a>
 
 <a class="nav-link"
 

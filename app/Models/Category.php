@@ -7,14 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
 {
-        use HasFactory;
-    
-        /**
-         * fillable
-         *
-         * @var array
-         */
-        protected $fillable = [
-            'name',
-        ];
+    use HasFactory;
+
+    /**
+     * fillable
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'nama',
+    ];
 }

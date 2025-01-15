@@ -2,53 +2,48 @@
 
 @section('content')
 <div class="container-fluid px-4">
-    <h1 class="mt-4">Customers</h1>
+    <h1 class="mt-4">Categories</h1>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
-        <li class="breadcrumb-item active">Customers</li>
+        <li class="breadcrumb-item active">Categories</li>
     </ol>
     <div class="card mb-4">
         <div class="card-body">
-            <a href="{{ route('customers.create') }}" class="btn btn-md btn-success mb-3">ADD CUSTOMER</a>
+            <a href="{{ route('categories.create') }}" class="btn btn-md btn-success mb-3">ADD CATEGORY</a>
             <div class="row">
                 <table class="table table-bordered data-table">
                     <thead>
                         <tr>
                             <th scope="col">ID</th>
-                            <th scope="col">NIK</th>
                             <th scope="col">NAME</th>
-                            <th scope="col">TELP</th>
-                            <th scope="col">EMAIL</th>
-                            <th scope="col">ALAMAT</th>
                             <th scope="col" style="width: 20%">ACTIONS</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($customers as $customer)
+                        @forelse ($categories as $category)
                         <tr>
-                            <td>{{ $customer->id }}</td>
-                            <td>{{ $customer->nik }}</td>
-                            <td>{{ $customer->name }}</td>
-                            <td>{{ $customer->telp }}</td>
-                            <td>{{ $customer->email }}</td>
-                            <td>{{ $customer->alamat }}</td>
+                            <td>{{ $category->id }}</td>
+                            <td>{{ $category->nama }}</td>
                             <td class="text-center">
-                                <form onsubmit="return confirm('Apakah Anda Yakin ?');" action="{{ route('customers.destroy', $customer->id) }}" method="POST">
-                                    <a href="{{ route('customers.edit', $customer->id) }}" class="btn btn-sm btn-primary">EDIT</a>
+                                <form onsubmit="return confirm('Apakah Anda Yakin?');" 
+                                    action="{{ route('categories.destroy', $category->id) }}" 
+                                    method="POST">
+                                    <a href="{{ route('categories.edit', $category->id) }}" 
+                                       class="btn btn-sm btn-primary">EDIT</a>
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-danger">HAPUS</button>
                                 </form>
                             </td>
                         </tr>
-                    @empty
+                        @empty
                         <div class="alert alert-danger">
-                            Data Customers belum Tersedia.
+                            Data Categories belum tersedia.
                         </div>
-                    @endforelse
+                        @endforelse
                     </tbody>
                 </table>
-                {{ $customers->links() }}
+                {{ $categories->links() }}
             </div>
         </div>
     </div>

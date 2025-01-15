@@ -6,75 +6,142 @@ use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use App\Models\Customer;
 use Illuminate\View\View;
-use Illuminate\Support\Facedes\Storage;
 
 class CustomerController extends Controller
 {
     /**
-     * index
+     * Display a listing of customers.
      *
-     * @return void
+     * @return View
      */
-    public function index() : View
+    public function index(): View
     {
-        //get all products
-        $customer = Customer::latest()->paginate(10);
+        // Get all customers
+        $customers = Customer::latest()->paginate(10);
 
-        //render view with products
-        return view('customers.index', compact('customers'));
+        // Render view with customers
+        return view('customer.index', compact('customers'));
     }
 
     /**
-     * create
-     * @return view
+     * Show the form for creating a new customer.
+     *
+     * @return View
      */
-    public function create() : View
+    public function create(): View
     {
         return view('customers.create');
     }
 
     /**
-     * store
-     * 
-     * @param mixed $request
+     * Store a newly created customer in storage.
+     *
+     * @param Request $request
      * @return RedirectResponse
      */
-
-    public function store($request) : RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
-        //validate form
+        // Validate form input
         $request->validate([
-            'nik'    => 'required|numeric',
-            'name'   => 'required|string|max:255',
-            'telp'   => 'required|numeric',
-            'email'  => 'required|string|max:255',
-            'alamat' => 'required|string|max:255',
+            'nik' => 'required|numeric|unique:customers,nik',
+            'name' => 'required|min:3',
+            'telp' => 'required|numeric',
+            'email' => 'required|email|unique:customers,email',
+            'alamat' => 'required|min:5',
         ]);
 
-    Customer::create([
-            'nik'    => $request->nik,
-            'name'   => $request->name,
-            'telp'   => $request->telp,
-            'email'  => $request->email,
+        // Create customer
+        Customer::create([
+            'nik' => $request->nik,
+            'name' => $request->name,
+            'telp' => $request->telp,
+            'email' => $request->email,
             'alamat' => $request->alamat,
-    ]);
-    //redirect to index
-    return redirect()->route('customer.index')->with(['success' => 'Data Berhasil Disimpan!']);
+        ]);
+
+        // Redirect to customer index with success message
+        return redirect()->route('customers.index')->with(['success' => 'Data Berhasil Disimpan!']);
     }
 
     /**
-     * show
-     * 
-     * @param mixed $id
-     * @return view
+     * Display the specified customer.
+     *
+     * @param string $id
+     * @return View
      */
-
     public function show(string $id): View
     {
-        //get customer by ID
-        $customer = Customer::findorFail($id);
+        // Get customer by ID
+        $customer = Customer::findOrFail($id);
 
-        //render view with customer
-        return View('customer.show', compact('customer'));
+        // Render view with customer details
+        return view('customers.show', compact('customer'));
+    }
+
+    /**
+     * Show the form for editing the specified customer.
+     *
+     * @param string $id
+     * @return View
+     */
+    public function edit(string $id): View
+    {
+        // Get customer by ID
+        $customer = Customer::findOrFail($id);
+
+        // Render view with customer data for editing
+        return view('customer.edit', compact('customer'));
+    }
+
+    /**
+     * Update the specified customer in storage.
+     *
+     * @param Request $request
+     * @param string $id
+     * @return RedirectResponse
+     */
+    public function update(Request $request, string $id): RedirectResponse
+    {
+        // Validate form input
+        $request->validate([
+            'nik' => 'required|numeric|unique:customers,nik,' . $id,
+            'name' => 'required|min:3',
+            'telp' => 'required|numeric',
+            'email' => 'required|email|unique:customers,email,' . $id,
+            'alamat' => 'required|min:5',
+        ]);
+
+        // Get customer by ID
+        $customer = Customer::findOrFail($id);
+
+        // Update customer data
+        $customer->update([
+            'nik' => $request->nik,
+            'name' => $request->name,
+            'telp' => $request->telp,
+            'email' => $request->email,
+            'alamat' => $request->alamat,
+        ]);
+
+        // Redirect to customer index with success message
+        return redirect()->route('customers.index')->with(['success' => 'Data Berhasil Diubah!']);
+    }
+
+    /**
+     * Remove the specified customer from storage.
+     *
+     * @param string $id
+     * @return RedirectResponse
+     */
+    public function destroy(string $id): RedirectResponse
+    {
+        // Get customer by ID
+        $customer = Customer::findOrFail($id);
+
+        // Delete customer
+        $customer->delete();
+
+        // Redirect to customer index with success message
+        return redirect()->route('customers.index')->with(['success' => 'Data Berhasil Dihapus!']);
     }
 }
